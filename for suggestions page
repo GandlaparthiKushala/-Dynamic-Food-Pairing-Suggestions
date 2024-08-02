@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Pairing Suggestion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://cdn.georgeinstitute.org/sites/default/files/styles/width1920_fallback/public/2020-10/world-food-day-2020.png'); /* Background image URL */
+            background-size: cover;
+            background-position: center;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            height: 100vh; /* Ensure the background covers the entire viewport height */
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for readability */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .result {
+            font-size: 18px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Food Pairing Suggestion</h1>
+        <div id="result" class="result"></div>
+        <img id="suggestionImage" src="" alt="Food pairing image">
+    </div>
+
+    <script>
+        const pairings = {
+            apple: { pairing: 'cheese or peanut butter', image: 'https://images.immediate.co.uk/production/volatile/sites/30/2022/04/5x-Reasons-to-Buy-Images-Web-1-1-9c00dac.png?quality=90&resize=556,505' },
+            banana: { pairing: 'yogurt or oatmeal', image: 'https://cdn.lemonsforlulu.com/wp-content/uploads/2021/11/Banana-recipes.jpg' },
+            carrot: { pairing: 'hummus or ranch dip', image: 'https://images.immediate.co.uk/production/volatile/sites/30/2022/10/Hot-honey-carrots-dbce642.jpg?resize=768,574' },
+            broccoli: { pairing: 'cheese or garlic sauce', image: 'https://www.foodandwine.com/thmb/j5pV73jbq5tOPikAF0I-eHvYhOk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Caramelized-Broccoli-with-Garlic-FT-RECIPE0822-2000-926848df43b3456ba0d4aa6dfb6766e9.jpg' },
+            chicken: { pairing: 'rosemary or garlic', image: 'https://www.skinnytaste.com/wp-content/uploads/2023/07/BBQ-Chicken-8.jpg' },
+            beef: { pairing: 'red wine or mashed potatoes', image: 'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/roast-beef-recipes-536cd86.jpg' },
+            salmon: { pairing: 'dill or lemon', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQj_ZsugoJ8EbYPBZAg6NWZyLxhMtysyXUJdg&s' },
+            shrimp: { pairing: 'garlic butter or lemon', image: 'https://www.themediterraneandish.com/wp-content/uploads/2017/04/Easy-Shrimp-Recipe-The-Mediterranean-Dish-4.jpg' },
+            cheese: { pairing: 'crackers or wine', image: 'https://www.vegrecipesofindia.com/wp-content/uploads/2017/10/paneer-cheese-toast.jpg' },
+            bread: { pairing: 'soup or butter', image: 'https://www.indianhealthyrecipes.com/wp-content/uploads/2021/09/bread-recipes-for-snacks-768x1152.webp' },
+            wine: { pairing: 'cheese or fruit', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoETud26fb9VbWawVdHAERIJYzikZ8P7sYqg&s' },
+            chocolate: { pairing: 'strawberries or coffee', image: 'https://static.toiimg.com/thumb/54407737.cms?imgsize=106326&width=800&height=800' },
+            coffee: { pairing: 'pastries or dark chocolate', image: 'https://hips.hearstapps.com/hmg-prod/images/210923-delish-seo-espresso-martini-horizontal-0087-eb-1632949141.jpg' },
+            nuts: { pairing: 'dried fruit or yogurt', image: 'https://food.fnr.sndimg.com/content/dam/images/food/fullset/2011/8/29/1/FNM_100111-OOT-B003-0_s4x3.jpg.rend.hgtvcom.616.462.suffix/1371599901451.jpeg' },
+            grapes: { pairing: 'cheese or salad', image: 'https://www.tasteofhome.com/wp-content/uploads/2018/01/Roasted-Grape-Crostini_EXPS_SDDJ17_180196_C08_25_4b-2.jpg?fit=700%2C1024' },
+            pasta: { pairing: 'tomato sauce or garlic bread', image: 'https://www.allrecipes.com/thmb/mvO1mRRH1zTz1SvbwBCTz78CRJI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/67700_RichPastaforthePoorKitchen_ddmfs_4x3_2284-220302ec8328442096df370dede357d7.jpg' },
+            tomato: { pairing: 'basil or mozzarella', image: 'https://www.themediterraneandish.com/wp-content/uploads/2021/05/fried-tomatoes-3.jpg' },
+            steak: { pairing: 'red wine or sautéed mushrooms', image: 'https://www.cookingclassy.com/wp-content/uploads/2022/07/grilled-steak-15.jpg' },
+            bacon: { pairing: 'eggs or sandwiches', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXeg1MMHlhpRuxeAP15aY-0yehFDFeNyKtsw&s' },
+            eggs: { pairing: 'avocado or toast', image: 'https://www.allrecipes.com/thmb/AUgo0AhMzaGborr-4E16ztUsxi8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/241925-super-easy-egg-casserole-beauty-3x4-013506441215-e6a1ab565430400796da905d260a90c0.jpg' },
+            // Add more pairings as needed
+        };
+
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        const foodItem = getQueryParam('food');
+        const suggestion = pairings[foodItem];
+
+        if (suggestion) {
+            document.getElementById('result').innerText = `Try pairing "${foodItem}" with ${suggestion.pairing}.`;
+            document.getElementById('suggestionImage').src = suggestion.image;
+            document.getElementById('suggestionImage').alt = `Pairing of ${foodItem} with ${suggestion.pairing}`;
+        } else {
+            document.getElementById('result').innerText = `Sorry, no specific suggestion available for "${foodItem}". Try pairing it with common items like bread, cheese, fruits, vegetables, or wine.`;
+            document.getElementById('suggestionImage').src = ''; // Clear image if no suggestion
+        }
+    </script>
+</body>
+</html>
+
+
